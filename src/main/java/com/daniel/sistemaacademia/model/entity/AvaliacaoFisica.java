@@ -80,4 +80,10 @@ public class AvaliacaoFisica {
         BigDecimal pesoMagro = ( peso.subtract(pesoGordo) );  // calculo
         return peso.divide(pesoMagro);
     }
+
+    public BigDecimal calcularPesoResidual(Optional<AvaliacaoFisica> avaliacaoFisica) {
+        // calcular Peso Residual = peso corporal * 0,24
+        BigDecimal peso = avaliacaoFisica.get().getDesempenho().getPeso();
+        return peso.multiply(BigDecimal.valueOf(0.24));
+    }
 }

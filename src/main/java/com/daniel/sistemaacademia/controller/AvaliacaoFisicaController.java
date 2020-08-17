@@ -113,4 +113,15 @@ public class AvaliacaoFisicaController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/peso-residual/{id}")
+    public ResponseEntity calculatePesoResidual(@PathVariable("id") Long id) {
+        Optional<AvaliacaoFisica> avaliacaoFisica = avaliacaoFisicaRepository.findById(id);
+        if(avaliacaoFisica.isPresent()) {
+            BigDecimal pesoResidual = avaliacaoFisica.get().calcularPesoResidual(avaliacaoFisica);
+            return ResponseEntity.ok(pesoResidual);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 }
