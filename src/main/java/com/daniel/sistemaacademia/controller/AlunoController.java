@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/alunos/")
+@RequestMapping("/api/alunos")
 @RequiredArgsConstructor
 public class AlunoController {
 
@@ -40,14 +40,14 @@ public class AlunoController {
         if(aluno.isPresent()) {
             return ResponseEntity.ok(aluno);
         } else {
-            return ResponseEntity.badRequest().body("Usuário não encontrado.");
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
     public ResponseEntity save(@RequestBody AlunoDTO dto) {
         try {
-            Aluno entidade = converter(dto);
+            Aluno entidade = new Aluno().converter(dto, usuarioRepository);
             entidade = alunoRepository.save(entidade);
             return new ResponseEntity(entidade, HttpStatus.CREATED);
         }catch (RegraNegocioException e) {
@@ -59,38 +59,22 @@ public class AlunoController {
     public ResponseEntity edit(@PathVariable("id") Long id, @RequestBody AlunoDTO dto) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()) {
-            Aluno alunoConvertido = converter(dto);
+            Aluno alunoConvertido = new Aluno().converter(dto, usuarioRepository);
+            alunoRepository.save(alunoConvertido);
             return ResponseEntity.ok(alunoConvertido);
         }
 
         return ResponseEntity.notFound().build();
     }
 
-    private Aluno converter(AlunoDTO dto) {
-        Aluno aluno = new Aluno();
-        aluno.setNome(dto.getNome());
-        aluno.setEmail(dto.getEmail());
-        aluno.setCpf(dto.getCpf());
-        aluno.setRg(dto.getRg());
-        aluno.setDataNascimento(dto.getDataNascimento());
-        aluno.setEndereco(dto.getEndereco());
-        aluno.setBairro(dto.getBairro());
-        aluno.setCep(dto.getCep());
-        aluno.setCidade(dto.getCidade());
-        aluno.setUf(dto.getUf());
-        aluno.setObjetivo(dto.getObjetivo());
-        aluno.setMatriculado(dto.isMatriculado());
-        aluno.setEstadoCivil(dto.getEstadoCivil());
-        aluno.setProfissao(dto.getProfissao());
-        aluno.setIdade(dto.getIdade());
-        aluno.setDebito(dto.getDebito());
-        aluno.setDataCadastro(dto.getDataCadastro());
-
-        Optional<Usuario> usuarioRetorno = this.usuarioRepository.findById(dto.getUsuario());
-        if (usuarioRetorno.isPresent()) {
-            aluno.setUsuario(usuarioRetorno.get());
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        Optional<Aluno> aluno = alunoRepository.findById(id);
+        if(aluno.isPresent()) {
+            alunoRepository.delete(aluno.get());
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body("Aluno não encontrado.");
         }
-
-        return aluno;
     }
 }

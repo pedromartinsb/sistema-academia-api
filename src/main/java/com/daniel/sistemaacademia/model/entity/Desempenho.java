@@ -44,6 +44,9 @@ public class Desempenho {
     @Column(name = "pressao")
     private BigDecimal pressao;
 
+    @Column(name = "peso")
+    private BigDecimal peso;
+
     @Column(name = "frequencia_cardiaca")
     private Integer frequenciaCardiaca;
 

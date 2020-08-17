@@ -1,5 +1,6 @@
 package com.daniel.sistemaacademia.model.entity;
 
+import com.daniel.sistemaacademia.model.dto.ExercicioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +26,12 @@ public class Exercicio {
 
     @Column(name = "grupo_muscular")
     private String grupoMuscular;
+
+    public Exercicio converter(ExercicioDTO dto) {
+        Exercicio exercicio = new Exercicio();
+        exercicio.setDescricao(dto.getDescricao());
+        exercicio.setGrupoMuscular(dto.getGrupoMuscular());
+        return exercicio;
+    }
 
 }

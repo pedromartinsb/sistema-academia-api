@@ -1,11 +1,14 @@
 package com.daniel.sistemaacademia.model.entity;
 
+import com.daniel.sistemaacademia.model.dto.AlunoDTO;
+import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import lombok.*;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Entity
 @Table( name = "aluno" , schema = "academias")
@@ -76,5 +79,33 @@ public class Aluno {
     @Column(name = "data_cadastro")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataCadastro;
+
+    public Aluno converter(AlunoDTO dto, UsuarioRepository usuarioRepository) {
+        Aluno aluno = new Aluno();
+        aluno.setNome(dto.getNome());
+        aluno.setEmail(dto.getEmail());
+        aluno.setCpf(dto.getCpf());
+        aluno.setRg(dto.getRg());
+        aluno.setDataNascimento(dto.getDataNascimento());
+        aluno.setEndereco(dto.getEndereco());
+        aluno.setBairro(dto.getBairro());
+        aluno.setCep(dto.getCep());
+        aluno.setCidade(dto.getCidade());
+        aluno.setUf(dto.getUf());
+        aluno.setObjetivo(dto.getObjetivo());
+        aluno.setMatriculado(dto.isMatriculado());
+        aluno.setEstadoCivil(dto.getEstadoCivil());
+        aluno.setProfissao(dto.getProfissao());
+        aluno.setIdade(dto.getIdade());
+        aluno.setDebito(dto.getDebito());
+        aluno.setDataCadastro(dto.getDataCadastro());
+
+        Optional<Usuario> usuarioRetorno = usuarioRepository.findById(dto.getUsuario());
+        if (usuarioRetorno.isPresent()) {
+            aluno.setUsuario(usuarioRetorno.get());
+        }
+
+        return aluno;
+    }
 
 }
