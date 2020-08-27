@@ -2,6 +2,8 @@ package com.daniel.sistemaacademia.model.entity;
 
 import javax.persistence.*;
 
+import com.daniel.sistemaacademia.model.dto.AlunoDTO;
+import com.daniel.sistemaacademia.model.dto.UsuarioDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -34,5 +36,21 @@ public class Usuario {
 	@Column(name = "senha")
 	@JsonIgnore
 	private String senha;
+
+	public Usuario converter(UsuarioDTO dto) {
+		Usuario usuario = new Usuario();
+		usuario.setEmail(dto.getEmail());
+		usuario.setNome(dto.getNome());
+		usuario.setSenha(dto.getSenha());
+		return usuario;
+	}
+
+	public Usuario converterPorAlunoDTO(AlunoDTO dto) {
+		Usuario usuario = new Usuario();
+		usuario.setEmail(dto.getEmail());
+		usuario.setNome(dto.getNome());
+		usuario.setSenha(dto.getSenha());
+		return usuario;
+	}
 
 }

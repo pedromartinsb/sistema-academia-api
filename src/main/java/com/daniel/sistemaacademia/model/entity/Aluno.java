@@ -99,12 +99,6 @@ public class Aluno {
         aluno.setIdade(dto.getIdade());
         aluno.setDebito(dto.getDebito());
         aluno.setDataCadastro(dto.getDataCadastro());
-
-        Optional<Usuario> usuarioRetorno = usuarioRepository.findById(dto.getUsuario());
-        if (usuarioRetorno.isPresent()) {
-            aluno.setUsuario(usuarioRetorno.get());
-        }
-
         return aluno;
     }
 

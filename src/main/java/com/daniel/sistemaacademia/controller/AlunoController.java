@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,18 +45,35 @@ public class AlunoController {
         }
     }
 
+    @GetMapping("{id}/usuarios")
+    public ResponseEntity findByIdUsuario(@PathVariable("id") Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isPresent()) {
+            List<Aluno> alunos = alunoRepository.findByUsuario(usuario.get());
+            return ResponseEntity.ok(alunos);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
+    @Transactional
     public ResponseEntity save(@RequestBody AlunoDTO dto) {
         try {
+            Usuario usuario = new Usuario().converterPorAlunoDTO(dto);
+            usuario = usuarioRepository.save(usuario);
             Aluno entidade = new Aluno().converter(dto, usuarioRepository);
+            entidade.setUsuario(usuario);
             entidade = alunoRepository.save(entidade);
             return new ResponseEntity(entidade, HttpStatus.CREATED);
-        }catch (RegraNegocioException e) {
+        } catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity edit(@PathVariable("id") Long id, @RequestBody AlunoDTO dto) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()) {

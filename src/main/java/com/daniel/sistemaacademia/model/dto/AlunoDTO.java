@@ -14,6 +14,7 @@ public class AlunoDTO {
 
     private String nome;
     private Long usuario;
+    private String senha;
     private String email;
     private String cpf;
     private String rg;

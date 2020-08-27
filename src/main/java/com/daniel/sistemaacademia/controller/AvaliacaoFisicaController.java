@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/avalicao-fisica")
+@RequestMapping("/api/avaliacaoFisica")
 @RequiredArgsConstructor
 public class AvaliacaoFisicaController {
 
