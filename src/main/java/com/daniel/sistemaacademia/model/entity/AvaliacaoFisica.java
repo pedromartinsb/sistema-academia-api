@@ -42,18 +42,10 @@ public class AvaliacaoFisica {
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataAvaliacao;
 
-    public AvaliacaoFisica converter(AvaliacaoFisicaDTO dto, AlunoRepository alunoRepository, DesempenhoRepository desempenhoRepository) {
+    public AvaliacaoFisica converter(AvaliacaoFisicaDTO dto) {
         AvaliacaoFisica avaliacaoFisica = new AvaliacaoFisica();
         avaliacaoFisica.setAvaliador(dto.getAvaliador());
         avaliacaoFisica.setDataAvaliacao(dto.getDataAvaliacao());
-
-        // pegar Aluno
-        Aluno alunoConsulta = alunoRepository.getOne(dto.getAluno());
-        avaliacaoFisica.setAluno(alunoConsulta);
-
-        // pegar Desempenho
-        Desempenho desempenhoConsulta = desempenhoRepository.getOne(dto.getDesempenho());
-        avaliacaoFisica.setDesempenho(desempenhoConsulta);
 
         return avaliacaoFisica;
     }

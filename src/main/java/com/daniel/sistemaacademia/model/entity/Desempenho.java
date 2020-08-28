@@ -1,5 +1,6 @@
 package com.daniel.sistemaacademia.model.entity;
 
+import com.daniel.sistemaacademia.model.dto.AvaliacaoFisicaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,9 +49,24 @@ public class Desempenho {
     private BigDecimal peso;
 
     @Column(name = "frequencia_cardiaca")
-    private Integer frequenciaCardiaca;
+    private String frequenciaCardiaca;
 
     @Column(name = "data_desempenho")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataDesempenho;
+
+    public Desempenho converterPorAvaliacaoFisicaoDTO(AvaliacaoFisicaDTO dto) {
+        Desempenho desempenho = new Desempenho();
+        desempenho.setAbdomen(dto.getAbdomen());
+        desempenho.setAltura(dto.getAltura());
+        desempenho.setDataDesempenho(dto.getDataDesempenho());
+        desempenho.setFrequenciaCardiaca(dto.getFrequenciaCardiaca());
+        desempenho.setGorduraCorporal(dto.getGorduraCorporal());
+        desempenho.setPanturrilha(dto.getPanturrilha());
+        desempenho.setPeso(dto.getPeso());
+        desempenho.setPressao(dto.getPressao());
+        desempenho.setQuadril(dto.getQuadril());
+        desempenho.setTorax(dto.getTorax());
+        return desempenho;
+    }
 }
