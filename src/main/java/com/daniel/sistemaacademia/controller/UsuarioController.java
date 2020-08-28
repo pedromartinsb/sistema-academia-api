@@ -8,9 +8,12 @@ import java.util.Optional;
 import com.daniel.sistemaacademia.exception.ErroAutenticacao;
 import com.daniel.sistemaacademia.exception.RegraNegocioException;
 import com.daniel.sistemaacademia.model.dto.AlunoDTO;
+import com.daniel.sistemaacademia.model.dto.InstrutorDTO;
 import com.daniel.sistemaacademia.model.entity.Aluno;
+import com.daniel.sistemaacademia.model.entity.Instrutor;
 import com.daniel.sistemaacademia.model.entity.Usuario;
 import com.daniel.sistemaacademia.repository.AlunoRepository;
+import com.daniel.sistemaacademia.repository.InstrutorRepository;
 import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,9 @@ public class UsuarioController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
+
+	@Autowired
+	private InstrutorRepository instrutorRepository;
 
 	@PostMapping("/autenticar")
 	public ResponseEntity autenticar(@RequestBody UsuarioDTO dto) {
@@ -63,9 +69,24 @@ public class UsuarioController {
 		try {
 			Usuario usuario = new Usuario().converterPorAlunoDTO(dto);
 			usuario = usuarioRepository.save(usuario);
-			Aluno entidade = new Aluno().converter(dto, usuarioRepository);
+			Aluno entidade = new Aluno().converter(dto);
 			entidade.setUsuario(usuario);
 			entidade = alunoRepository.save(entidade);
+			return new ResponseEntity(entidade, HttpStatus.CREATED);
+		} catch (RegraNegocioException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/instrutores")
+	@Transactional
+	public ResponseEntity save(@RequestBody InstrutorDTO dto) {
+		try {
+			Usuario usuario = new Usuario().converterPorInstrutorDTO(dto);
+			usuario = usuarioRepository.save(usuario);
+			Instrutor entidade = new Instrutor().converter(dto);
+			entidade.setUsuario(usuario);
+			entidade = instrutorRepository.save(entidade);
 			return new ResponseEntity(entidade, HttpStatus.CREATED);
 		} catch (RegraNegocioException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

@@ -31,4 +31,5 @@ public class AlunoDTO {
     private Integer idade;
     private BigDecimal debito;
     private LocalDate dataCadastro;
+    private Integer tipoUsuario;
 }

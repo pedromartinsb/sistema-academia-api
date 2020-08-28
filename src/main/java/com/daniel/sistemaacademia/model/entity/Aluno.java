@@ -80,7 +80,7 @@ public class Aluno {
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataCadastro;
 
-    public Aluno converter(AlunoDTO dto, UsuarioRepository usuarioRepository) {
+    public Aluno converter(AlunoDTO dto) {
         Aluno aluno = new Aluno();
         aluno.setNome(dto.getNome());
         aluno.setEmail(dto.getEmail());

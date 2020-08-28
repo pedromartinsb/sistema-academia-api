@@ -1,5 +1,7 @@
 package com.daniel.sistemaacademia.model.entity;
 
+import com.daniel.sistemaacademia.model.dto.InstrutorDTO;
+import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,4 +39,12 @@ public class Instrutor {
     @Column(name = "data_admissao")
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataAdmissao;
+
+    public Instrutor converter(InstrutorDTO dto) {
+        Instrutor instrutor = new Instrutor();
+        instrutor.setNome(dto.getNome());
+        instrutor.setTelefone(dto.getTelefone());
+        instrutor.setDataAdmissao(dto.getDataAdmissao());
+        return instrutor;
+    }
 }
