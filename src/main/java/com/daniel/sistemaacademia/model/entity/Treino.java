@@ -1,5 +1,6 @@
 package com.daniel.sistemaacademia.model.entity;
 
+import com.daniel.sistemaacademia.model.dto.TreinoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table( name = "treino" , schema = "academias")
@@ -27,14 +30,18 @@ public class Treino {
     @JoinColumn(name = "id_aluno")
     private Aluno aluno;
 
-    @ManyToOne
-    @JoinColumn(name = "id_modalidade")
-    private Modalidade modalidade;
-
     @Column(name = "tipo_treino")
     private String tipoTreino;
 
-    @Column(name = "nome_treino")
-    private String nomeTreino;
+    @Column(name = "nome")
+    private String nome;
+
+    public Treino converter(TreinoDTO treinoDTO, Aluno aluno) {
+        Treino treino = new Treino();
+        treino.setAluno(aluno);
+        treino.setTipoTreino(treinoDTO.getTipoTreino());
+        treino.setNome(treinoDTO.getNome());
+        return treino;
+    }
 
 }

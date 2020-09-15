@@ -2,6 +2,8 @@ package com.daniel.sistemaacademia.model.dto;
 
 import lombok.*;
 
+import javax.persistence.Column;
+
 @Getter
 @Setter
 @Builder
@@ -9,6 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 public class ExercicioDTO {
 
-    private String descricao;
+    private String nome;
+    private String dica;
     private String grupoMuscular;
+    private String repeticoes;
+    private String carga;
+    private String series;
 }

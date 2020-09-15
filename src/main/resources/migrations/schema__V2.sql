@@ -70,13 +70,6 @@ CREATE TABLE academias.avaliacao_fisica
   data_avaliacao date
 );
 
-CREATE TABLE academias.exercicio
-(
-  id bigserial NOT NULL PRIMARY KEY,
-  descricao character varying(150),
-  grupo_muscular character varying(150)
-);
-
 CREATE TABLE academias.instrutor
 (
   id bigserial NOT NULL PRIMARY KEY,
@@ -89,38 +82,25 @@ CREATE TABLE academias.instrutor
 CREATE TABLE academias.modalidade
 (
   id bigserial NOT NULL PRIMARY KEY,
-  id_instrutor bigint REFERENCES academias.instrutor (id),
   nome character varying(150),
-  descricao character varying(150),
-  valor numeric(16,2)
-);
-
-CREATE TABLE academias.matricula
-(
-  id bigserial NOT NULL PRIMARY KEY ,
-  id_aluno bigint REFERENCES academias.aluno (id),
-  id_modalidade bigint REFERENCES academias.modalidade (id),
-  data_matricula date default now(),
-  desconto numeric(16,2),
-  data_vencimento date,
-  valor_final numeric(16,2),
-  data_fim date
+  descricao character varying(150)
 );
 
 CREATE TABLE academias.treino
 (
   id bigserial NOT NULL PRIMARY KEY,
   id_aluno bigint REFERENCES academias.aluno (id),
-  id_modalidade bigint REFERENCES academias.modalidade (id),
   tipo_treino character varying(150),
-  nome_treino character varying(150)
+  nome character varying(150)
 );
 
-CREATE TABLE academias.plano_treino
+CREATE TABLE academias.exercicio
 (
   id bigserial NOT NULL PRIMARY KEY,
-  id_exercicio bigint REFERENCES academias.exercicio (id),
   id_treino bigint REFERENCES academias.treino (id),
+  nome character varying(150),
+  dica character varying(150),
+  grupo_muscular character varying(150),
   repeticoes integer,
   carga integer,
   series integer
@@ -134,6 +114,18 @@ CREATE TABLE academias.pagamento
   valor_pago numeric(16,2),
   data_pagamento date,
   forma_pagamento character varying(150)
+);
+
+CREATE TABLE academias.matricula
+(
+  id bigserial NOT NULL PRIMARY KEY ,
+  id_aluno bigint REFERENCES academias.aluno (id),
+  id_modalidade bigint REFERENCES academias.modalidade (id),
+  data_matricula date default now(),
+  desconto numeric(16,2),
+  data_vencimento date,
+  valor_final numeric(16,2),
+  data_fim date
 );
 
 
