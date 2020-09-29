@@ -2,8 +2,12 @@ package com.daniel.sistemaacademia.controller;
 
 import com.daniel.sistemaacademia.exception.RegraNegocioException;
 import com.daniel.sistemaacademia.model.dto.ExercicioDTO;
+import com.daniel.sistemaacademia.model.entity.Aluno;
 import com.daniel.sistemaacademia.model.entity.Exercicio;
+import com.daniel.sistemaacademia.model.entity.Treino;
+import com.daniel.sistemaacademia.repository.AlunoRepository;
 import com.daniel.sistemaacademia.repository.ExercicioRepository;
+import com.daniel.sistemaacademia.repository.TreinoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,12 @@ public class ExercicioController {
     @Autowired
     private ExercicioRepository exercicioRepository;
 
+    @Autowired
+    private TreinoRepository treinoRepository;
+
+    @Autowired
+    private AlunoRepository alunoRepository;
+
     @GetMapping
     public ResponseEntity findAll() {
         List<Exercicio> exercicios = exercicioRepository.findAll();
@@ -37,12 +47,29 @@ public class ExercicioController {
         }
     }
 
+    @GetMapping("/treino/{id}")
+    public ResponseEntity findTreinosByIdAluno(@PathVariable("id") Long id) {
+        Optional<Treino> treino = treinoRepository.findById(id);
+        if(treino.isPresent()) {
+            ExercicioDTO dto = new ExercicioDTO();
+            return ResponseEntity.ok(exercicioRepository.findAllByTreino(treino.get()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity save(@RequestBody ExercicioDTO dto) {
         try {
-            Exercicio entidade = new Exercicio().converter(dto);
-            entidade = exercicioRepository.save(entidade);
-            return new ResponseEntity(entidade, HttpStatus.CREATED);
+            Exercicio exercicio = new Exercicio().converter(dto);
+            Optional<Treino> treino = treinoRepository.findById(dto.getTreino());
+            if (treino.isPresent()) {
+                exercicio.setTreino(treino.get());
+                exercicio = exercicioRepository.save(exercicio);
+                return new ResponseEntity(exercicio, HttpStatus.CREATED);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         }catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

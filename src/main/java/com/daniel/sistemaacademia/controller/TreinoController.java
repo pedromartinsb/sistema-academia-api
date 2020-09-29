@@ -4,8 +4,10 @@ import com.daniel.sistemaacademia.model.dto.TreinoDTO;
 import com.daniel.sistemaacademia.model.entity.Aluno;
 import com.daniel.sistemaacademia.model.entity.AvaliacaoFisica;
 import com.daniel.sistemaacademia.model.entity.Treino;
+import com.daniel.sistemaacademia.model.entity.Usuario;
 import com.daniel.sistemaacademia.repository.AlunoRepository;
 import com.daniel.sistemaacademia.repository.TreinoRepository;
+import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ public class TreinoController {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -52,11 +57,14 @@ public class TreinoController {
 
     @GetMapping("/aluno/{id}")
     public ResponseEntity findByIdAluno(@PathVariable("id") Long id) {
-        Optional<Aluno> aluno = alunoRepository.findById(id);
-
-        if(aluno.isPresent()) {
-            List<Treino> treinos = treinoRepository.findAllByAluno(aluno.get());
-            return ResponseEntity.ok(treinos);
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        if(usuario.isPresent()) {
+            List<Aluno> aluno = alunoRepository.findByUsuario(usuario.get());
+            if(!aluno.isEmpty()) {
+                return ResponseEntity.ok(treinoRepository.findAllByAluno(aluno.get(0)));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

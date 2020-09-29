@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table( name = "exercicio" , schema = "academias")
@@ -23,6 +21,10 @@ public class Exercicio {
     @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "id_treino")
+    private Treino treino;
+
     @Column(name = "nome")
     private String nome;
 
@@ -33,13 +35,13 @@ public class Exercicio {
     private String grupoMuscular;
 
     @Column(name = "repeticoes")
-    private String repeticoes;
+    private Integer repeticoes;
 
     @Column(name = "carga")
-    private String carga;
+    private Integer carga;
 
     @Column(name = "series")
-    private String series;
+    private Integer series;
 
     public Exercicio converter(ExercicioDTO dto) {
         Exercicio exercicio = new Exercicio();

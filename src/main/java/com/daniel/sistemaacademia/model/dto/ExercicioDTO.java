@@ -12,9 +12,10 @@ import javax.persistence.Column;
 public class ExercicioDTO {
 
     private String nome;
+    private Long treino;
     private String dica;
     private String grupoMuscular;
-    private String repeticoes;
-    private String carga;
-    private String series;
+    private Integer repeticoes;
+    private Integer carga;
+    private Integer series;
 }

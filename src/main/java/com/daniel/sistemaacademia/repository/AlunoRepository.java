@@ -13,6 +13,7 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
     public List<Aluno> findByUsuario(Usuario usuario);
 
+
     @Query("SELECT a FROM Aluno a " +
            "INNER JOIN Usuario u ON a.usuario = u.id " +
            "WHERE u.tipoUsuario = ?1")
