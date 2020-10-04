@@ -57,7 +57,7 @@ CREATE TABLE academias.desempenho
   quadril numeric(16,2),
   pressao numeric(16,2),
   peso numeric(16,2),
-  frequencia_cardiaca integer,
+  frequencia_cardiaca character varying(30),
   data_desempenho date default now()
 );
 

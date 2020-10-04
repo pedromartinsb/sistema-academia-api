@@ -51,7 +51,7 @@ public class AvaliacaoFisicaController {
     @GetMapping("/aluno/{id}")
     public ResponseEntity findByIdAluno(@PathVariable("id") Long id) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
-
+        
         if(aluno.isPresent()) {
             List<AvaliacaoFisica> avaliacaoFisicas = avaliacaoFisicaRepository.findAllByAluno(aluno.get());
             return ResponseEntity.ok(avaliacaoFisicas);

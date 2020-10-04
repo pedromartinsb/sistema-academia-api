@@ -56,9 +56,10 @@ public class AlunoController {
     @GetMapping("{id}/usuarios")
     public ResponseEntity findByIdUsuario(@PathVariable("id") Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-
+        
         if (usuario.isPresent()) {
             List<Aluno> alunos = alunoRepository.findByUsuario(usuario.get());
+            System.out.print("Alunos: " + alunos);
             return ResponseEntity.ok(alunos);
         } else {
             return ResponseEntity.notFound().build();
