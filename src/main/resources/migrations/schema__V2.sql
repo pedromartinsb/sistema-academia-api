@@ -106,16 +106,6 @@ CREATE TABLE academias.exercicio
   series integer
 );
 
-CREATE TABLE academias.pagamento
-(
-  id bigserial NOT NULL PRIMARY KEY,
-  id_matricula bigint REFERENCES academias.matricula (id),
-  valor_total numeric(16,2),
-  valor_pago numeric(16,2),
-  data_pagamento date,
-  forma_pagamento character varying(150)
-);
-
 CREATE TABLE academias.matricula
 (
   id bigserial NOT NULL PRIMARY KEY ,
@@ -128,10 +118,12 @@ CREATE TABLE academias.matricula
   data_fim date
 );
 
-
-
-
-
-
-
-
+CREATE TABLE academias.pagamento
+(
+  id bigserial NOT NULL PRIMARY KEY,
+  id_matricula bigint REFERENCES academias.matricula (id),
+  valor_total numeric(16,2),
+  valor_pago numeric(16,2),
+  data_pagamento date,
+  forma_pagamento character varying(150)
+);
