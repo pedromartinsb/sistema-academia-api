@@ -96,10 +96,12 @@ public class InstrutorController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Optional<Instrutor> instrutor = instrutorRepository.findById(id);
         if(instrutor.isPresent()) {
             instrutorRepository.delete(instrutor.get());
+            usuarioRepository.delete(instrutor.get().getUsuario());
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.badRequest().body("Instrutor não encontrado.");

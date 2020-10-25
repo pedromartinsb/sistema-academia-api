@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface TreinoRepository extends JpaRepository<Treino, Long> {
 
-    public List<Treino> findAllByAluno(Aluno aluno);
+    List<Treino> findAllByAluno(Aluno aluno);
+
+    void deleteAllByAluno(Aluno aluno);
 }

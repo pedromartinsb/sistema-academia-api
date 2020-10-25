@@ -6,6 +6,7 @@ import com.daniel.sistemaacademia.model.entity.AvaliacaoFisica;
 import com.daniel.sistemaacademia.model.entity.Treino;
 import com.daniel.sistemaacademia.model.entity.Usuario;
 import com.daniel.sistemaacademia.repository.AlunoRepository;
+import com.daniel.sistemaacademia.repository.ExercicioRepository;
 import com.daniel.sistemaacademia.repository.TreinoRepository;
 import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,9 @@ public class TreinoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ExercicioRepository exercicioRepository;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -88,9 +92,11 @@ public class TreinoController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Optional<Treino> treino = treinoRepository.findById(id);
         if(treino.isPresent()) {
+            exercicioRepository.deleteAllByTreino(treino.get());
             treinoRepository.delete(treino.get());
             return ResponseEntity.noContent().build();
         } else {

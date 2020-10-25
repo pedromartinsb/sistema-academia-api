@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ExercicioRepository extends JpaRepository<Exercicio, Long> {
 
-    public List<Exercicio> findAllByTreino(Treino treino);
+    List<Exercicio> findAllByTreino(Treino treino);
+
+    void deleteAllByTreino(Treino treino);
 }

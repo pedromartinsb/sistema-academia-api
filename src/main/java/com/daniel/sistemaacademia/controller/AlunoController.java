@@ -3,9 +3,13 @@ package com.daniel.sistemaacademia.controller;
 import com.daniel.sistemaacademia.model.dto.AlunoDTO;
 import com.daniel.sistemaacademia.exception.RegraNegocioException;
 import com.daniel.sistemaacademia.model.entity.Aluno;
+import com.daniel.sistemaacademia.model.entity.AvaliacaoFisica;
+import com.daniel.sistemaacademia.model.entity.Treino;
 import com.daniel.sistemaacademia.model.entity.Usuario;
 import com.daniel.sistemaacademia.model.enums.TipoUsuario;
 import com.daniel.sistemaacademia.repository.AlunoRepository;
+import com.daniel.sistemaacademia.repository.AvaliacaoFisicaRepository;
+import com.daniel.sistemaacademia.repository.TreinoRepository;
 import com.daniel.sistemaacademia.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,12 @@ public class AlunoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private AvaliacaoFisicaRepository avaliacaoFisicaRepository;
+
+    @Autowired
+    private TreinoRepository treinoRepository;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -96,13 +106,18 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()) {
+            avaliacaoFisicaRepository.deleteAllByAluno(aluno.get());
+            treinoRepository.deleteAllByAluno(aluno.get());
             alunoRepository.delete(aluno.get());
+            usuarioRepository.delete(aluno.get().getUsuario());
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.badRequest().body("Aluno não encontrado.");
         }
     }
+
 }

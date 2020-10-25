@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface AvaliacaoFisicaRepository extends JpaRepository<AvaliacaoFisica, Long> {
 
-    public List<AvaliacaoFisica> findAllByAluno(Aluno aluno);
+    List<AvaliacaoFisica> findAllByAluno(Aluno aluno);
+
+    void deleteAllByAluno(Aluno aluno);
 }
