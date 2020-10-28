@@ -96,7 +96,6 @@ public class TreinoController {
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Optional<Treino> treino = treinoRepository.findById(id);
         if(treino.isPresent()) {
-            exercicioRepository.deleteAllByTreino(treino.get());
             treinoRepository.delete(treino.get());
             return ResponseEntity.noContent().build();
         } else {

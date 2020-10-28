@@ -22,8 +22,8 @@ public class Exercicio {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_treino")
-    private Treino treino;
+    @JoinColumn(name = "id_grupo_muscular")
+    private GrupoMuscular grupoMuscular;
 
     @Column(name = "nome")
     private String nome;
@@ -31,26 +31,11 @@ public class Exercicio {
     @Column(name = "dica")
     private String dica;
 
-    @Column(name = "grupo_muscular")
-    private String grupoMuscular;
-
-    @Column(name = "repeticoes")
-    private Integer repeticoes;
-
-    @Column(name = "carga")
-    private Integer carga;
-
-    @Column(name = "series")
-    private Integer series;
-
-    public Exercicio converter(ExercicioDTO dto) {
+    public Exercicio converter(ExercicioDTO dto, GrupoMuscular grupMuscular) {
         Exercicio exercicio = new Exercicio();
         exercicio.setNome(dto.getNome());
         exercicio.setDica(dto.getDica());
-        exercicio.setCarga(dto.getCarga());
-        exercicio.setRepeticoes(dto.getRepeticoes());
-        exercicio.setSeries(dto.getSeries());
-        exercicio.setGrupoMuscular(dto.getGrupoMuscular());
+        exercicio.setGrupoMuscular(grupMuscular);
         return exercicio;
     }
 

@@ -7,9 +7,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExercicioDTO {
+public class GrupoMuscularDTO {
 
     private String nome;
-    private String dica;
-    private Long grupoMuscular;
+
 }

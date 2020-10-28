@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
 
-    public List<Aluno> findByUsuario(Usuario usuario);
+    List<Aluno> findByUsuario(Usuario usuario);
 
 
     @Query("SELECT a FROM Aluno a " +

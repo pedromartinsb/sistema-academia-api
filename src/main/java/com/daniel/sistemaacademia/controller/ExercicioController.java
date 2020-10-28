@@ -1,16 +1,11 @@
 package com.daniel.sistemaacademia.controller;
 
-import com.daniel.sistemaacademia.exception.RegraNegocioException;
 import com.daniel.sistemaacademia.model.dto.ExercicioDTO;
-import com.daniel.sistemaacademia.model.entity.Aluno;
-import com.daniel.sistemaacademia.model.entity.Exercicio;
-import com.daniel.sistemaacademia.model.entity.Treino;
-import com.daniel.sistemaacademia.repository.AlunoRepository;
-import com.daniel.sistemaacademia.repository.ExercicioRepository;
-import com.daniel.sistemaacademia.repository.TreinoRepository;
+import com.daniel.sistemaacademia.model.dto.TreinoDTO;
+import com.daniel.sistemaacademia.model.entity.*;
+import com.daniel.sistemaacademia.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +22,10 @@ public class ExercicioController {
     private ExercicioRepository exercicioRepository;
 
     @Autowired
-    private TreinoRepository treinoRepository;
+    private AlunoRepository alunoRepository;
 
     @Autowired
-    private AlunoRepository alunoRepository;
+    private GrupoMuscularRepository grupoMuscularRepository;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -48,45 +43,34 @@ public class ExercicioController {
         }
     }
 
-    @GetMapping("/treino/{id}")
-    public ResponseEntity findTreinosByIdAluno(@PathVariable("id") Long id) {
-        Optional<Treino> treino = treinoRepository.findById(id);
-        if(treino.isPresent()) {
-            ExercicioDTO dto = new ExercicioDTO();
-            return ResponseEntity.ok(exercicioRepository.findAllByTreino(treino.get()));
+    @GetMapping("/{id}/grupoMuscular")
+    public ResponseEntity findByIdGrupoMuscular(@PathVariable("id") Long id) {
+        Optional<GrupoMuscular> grupoMuscular = grupoMuscularRepository.findById(id);
+        if(grupoMuscular.isPresent()) {
+            List<Exercicio> exercicios = exercicioRepository.findAllByGrupoMuscular(grupoMuscular.get());
+            return ResponseEntity.ok(exercicios);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody ExercicioDTO dto) {
+    @Transactional
+    public ResponseEntity save(@RequestBody ExercicioDTO exercicioDTO) {
         try {
-            Exercicio exercicio = new Exercicio().converter(dto);
-            Optional<Treino> treino = treinoRepository.findById(dto.getTreino());
-            if (treino.isPresent()) {
-                exercicio.setTreino(treino.get());
+            Optional<GrupoMuscular> grupoMuscular = grupoMuscularRepository.findById(exercicioDTO.getGrupoMuscular());
+            if (grupoMuscular.isPresent()) {
+                Exercicio exercicio = new Exercicio().converter(exercicioDTO, grupoMuscular.get());
                 exercicio = exercicioRepository.save(exercicio);
-                return new ResponseEntity(exercicio, HttpStatus.CREATED);
+                return ResponseEntity.ok(exercicio);
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("Grupo Muscular não encontrado!");
             }
-        }catch (RegraNegocioException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity edit(@PathVariable("id") Long id, @RequestBody ExercicioDTO dto) {
-        Optional<Exercicio> exercicio = exercicioRepository.findById(id);
-        if(exercicio.isPresent()) {
-            Exercicio exercicioConvertido = new Exercicio().converter(dto);
-            exercicioRepository.save(exercicioConvertido);
-            return ResponseEntity.ok(exercicioConvertido);
-        }
-
-        return ResponseEntity.notFound().build();
-    }
 
     @DeleteMapping("/{id}")
     @Transactional
