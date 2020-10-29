@@ -1,7 +1,7 @@
 
 -- DROP DATABASE sistemaacademia;
 
-CREATE DATABASE sistemaacademia;
+-- CREATE DATABASE sistemaacademia;
 
 CREATE SCHEMA academias;
 
