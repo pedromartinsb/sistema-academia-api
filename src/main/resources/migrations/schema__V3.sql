@@ -140,6 +140,11 @@ CREATE TABLE academias.pagamento
   forma_pagamento character varying(150)
 );
 
+insert into academias.usuario(nome, email, senha, data_cadastro, tipo_usuario)
+values ('Coach Daniel', 'coach@email.com', '123456', '1990-01-01', 1)
+
+insert into academias.instrutor(id_usuario, nome, telefone, data_admissao)
+values (1, 'Coach Daniel', '987654321', '1990-01-01')
 
 insert into academias.grupo_muscular (nome)
 values ('Costas')
