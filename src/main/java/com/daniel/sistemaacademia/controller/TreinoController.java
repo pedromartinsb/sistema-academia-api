@@ -61,14 +61,9 @@ public class TreinoController {
 
     @GetMapping("/aluno/{id}")
     public ResponseEntity findByIdAluno(@PathVariable("id") Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        if(usuario.isPresent()) {
-            List<Aluno> aluno = alunoRepository.findByUsuario(usuario.get());
-            if(!aluno.isEmpty()) {
-                return ResponseEntity.ok(treinoRepository.findAllByAluno(aluno.get(0)));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        Optional<Aluno> aluno = alunoRepository.findById(id);
+        if(aluno.isPresent()) {
+            return ResponseEntity.ok(treinoRepository.findAllByAluno(aluno.get()));
         } else {
             return ResponseEntity.notFound().build();
         }

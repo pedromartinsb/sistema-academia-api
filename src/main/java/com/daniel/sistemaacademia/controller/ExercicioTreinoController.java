@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,24 @@ public class ExercicioTreinoController {
         Optional<Treino> treino = treinoRepository.findById(id);
         if (treino.isPresent()) {
             List<ExercicioTreino> list = exercicioTreinoRepository.findAllByTreino(treino.get());
+            return ResponseEntity.ok(list);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}/exercicio")
+    public ResponseEntity getByExercicio(@PathVariable("id") Long id) {
+        List<ExercicioTreino> list = new ArrayList<>();
+        Optional<GrupoMuscular> grupoMuscular = grupoMuscularRepository.findById(id);
+        if (grupoMuscular.isPresent()) {
+            List<Exercicio> exercicios = exercicioRepository.findAllByGrupoMuscular(grupoMuscular.get());
+            for(Exercicio exercicio : exercicios) {
+                List<ExercicioTreino> listExerc = exercicioTreinoRepository.findAllByExercicio(exercicio);
+                for(ExercicioTreino exerc : listExerc) {
+                    list.add(exerc);
+                }
+            }
             return ResponseEntity.ok(list);
         } else {
             return ResponseEntity.notFound().build();
