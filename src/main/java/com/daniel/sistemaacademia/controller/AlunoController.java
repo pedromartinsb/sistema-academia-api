@@ -7,10 +7,7 @@ import com.daniel.sistemaacademia.model.entity.AvaliacaoFisica;
 import com.daniel.sistemaacademia.model.entity.Treino;
 import com.daniel.sistemaacademia.model.entity.Usuario;
 import com.daniel.sistemaacademia.model.enums.TipoUsuario;
-import com.daniel.sistemaacademia.repository.AlunoRepository;
-import com.daniel.sistemaacademia.repository.AvaliacaoFisicaRepository;
-import com.daniel.sistemaacademia.repository.TreinoRepository;
-import com.daniel.sistemaacademia.repository.UsuarioRepository;
+import com.daniel.sistemaacademia.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +35,9 @@ public class AlunoController {
 
     @Autowired
     private TreinoRepository treinoRepository;
+
+    @Autowired
+    private ExercicioTreinoRepository exercicioTreinoRepository;
 
     @GetMapping
     public ResponseEntity findAll() {
@@ -110,6 +110,10 @@ public class AlunoController {
     public ResponseEntity delete(@PathVariable("id") Long id) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()) {
+            List<Treino> lstTreino = treinoRepository.findAllByAluno(aluno.get());
+            for (Treino treino : lstTreino) {
+                exercicioTreinoRepository.deleteAllByTreino(treino);
+            }
             avaliacaoFisicaRepository.deleteAllByAluno(aluno.get());
             treinoRepository.deleteAllByAluno(aluno.get());
             alunoRepository.delete(aluno.get());

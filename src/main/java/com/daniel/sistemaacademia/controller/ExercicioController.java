@@ -27,6 +27,9 @@ public class ExercicioController {
     @Autowired
     private GrupoMuscularRepository grupoMuscularRepository;
 
+    @Autowired
+    private ExercicioTreinoRepository exercicioTreinoRepository;
+
     @GetMapping
     public ResponseEntity findAll() {
         List<Exercicio> exercicios = exercicioRepository.findAll();
