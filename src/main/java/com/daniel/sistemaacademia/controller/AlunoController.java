@@ -97,9 +97,20 @@ public class AlunoController {
     public ResponseEntity edit(@PathVariable("id") Long id, @RequestBody AlunoDTO dto) {
         Optional<Aluno> aluno = alunoRepository.findById(id);
         if(aluno.isPresent()) {
-            Aluno alunoConvertido = new Aluno().converter(dto);
-            alunoRepository.save(alunoConvertido);
-            return ResponseEntity.ok(alunoConvertido);
+        	Aluno alunoConvertido = new Aluno().converter(dto);
+        	alunoConvertido.setId(id);
+        	alunoConvertido.setUsuario(aluno.get().getUsuario());
+        	Optional<Usuario> usuario = usuarioRepository.findById(aluno.get().getUsuario().getId());
+        	if (usuario.isPresent()) {
+        		usuario.get().setEmail(dto.getEmail());
+        		usuario.get().setNome(dto.getNome());
+        		usuario.get().setSenha(dto.getSenha());
+        		usuarioRepository.save(usuario.get());
+        		alunoRepository.save(alunoConvertido);
+                return ResponseEntity.ok(alunoConvertido);
+        	} else {
+        		return ResponseEntity.notFound().build();
+        	}                 	
         }
 
         return ResponseEntity.notFound().build();
