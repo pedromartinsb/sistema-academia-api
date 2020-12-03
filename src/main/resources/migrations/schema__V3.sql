@@ -163,3 +163,6 @@ values ('Pernas')
 
 insert into academias.grupo_muscular (nome)
 values ('Panturrilha')
+
+insert into academias.grupo_muscular (nome)
+values ('Abdomen')
